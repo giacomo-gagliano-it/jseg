@@ -1,13 +1,11 @@
-let assert = require('assert');
-let jseg = require('../src');
-let {TestGraph} = require('./util');
+import jseg from "../src";
+import { TestGraph } from "./util";
 
 let [b, t] = jseg.newSchema();
 
-b.entity('Node');
+b.entity("Node");
 
 b.finalize({
-
   attributes: {
     Node: {
       index: t.Num,
@@ -15,64 +13,70 @@ b.finalize({
   },
 
   relationships: [
-    [[t.Node, 'one', 'parent'],
-     [t.Node, 'many', 'children', {
-       compare: (x, y) => Math.sign(x.index - y.index),
-     }]],
+    [
+      [t.Node, "one", "parent"],
+      [
+        t.Node,
+        "many",
+        "children",
+        {
+          compare: <X extends { index: number }>(x: X, y: X) =>
+            Math.sign(x.index - y.index),
+        },
+      ],
+    ],
   ],
-
 });
 
 let tg = new TestGraph(t);
 
-
 tg.g.put({
   type: t.Node,
-  lid: 'root',
+  lid: "root",
   children: [
     {
       type: t.Node,
-      lid: 'b',
+      lid: "b",
       index: 2,
     },
     {
       type: t.Node,
-      lid: 'a',
+      lid: "a",
       index: 1,
     },
     {
       type: t.Node,
-      lid: 'c',
+      lid: "c",
       index: 3,
     },
   ],
 });
 
-tg.check('root', {
+tg.check("root", {
   type: t.Node,
-  lid: 'root',
+  lid: "root",
   index: null,
   parent: null,
   children: [
     {
       type: t.Node,
-      lid: 'a',
+      lid: "a",
       index: 1,
-      parent: {lid: 'root'},
+      parent: { lid: "root" },
       children: [],
     },
     {
       type: t.Node,
-      lid: 'b',
+      lid: "b",
       index: 2,
-      parent: {lid: 'root'},
+      parent: { lid: "root" },
       children: [],
     },
     {
       type: t.Node,
-      lid: 'c',
+      lid: "c",
       index: 3,
-      parent: {lid: 'root'},
+      parent: { lid: "root" },
       children: [],
     },
   ],

@@ -1,25 +1,23 @@
-let assert = require('assert');
-let jseg = require('../src');
-let {TestGraph} = require('./util');
+import jseg from "../src";
+import { TestGraph } from "./util";
 
 let [b, t] = jseg.newSchema();
 
-b.entity('Thing');
+b.entity("Thing");
 
-b.scalar('Rounded', {
+b.scalar("Rounded", {
   validate: Math.round,
 });
-b.scalar('Even', {
+b.scalar("Even", {
   validate: (x) => {
     if (x % 2 !== 0) {
-      throw Error('expected even number');
+      throw Error("expected even number");
     }
     return x;
   },
 });
 
 b.finalize({
-
   attributes: {
     Thing: {
       rounded: t.Rounded,
@@ -28,37 +26,36 @@ b.finalize({
   },
 
   relationships: [],
-
 });
 
 let tg = new TestGraph(t);
 
 tg.g.put({
   type: t.Thing,
-  lid: 'good',
+  lid: "good",
   rounded: 6.8,
   even: 4,
 });
 
-tg.check('good', {
+tg.check("good", {
   type: t.Thing,
-  lid: 'good',
+  lid: "good",
   rounded: 7,
   even: 4,
 });
 
-tg.expectMessage('expected even number', () => {
+tg.expectMessage("expected even number", () => {
   tg.g.put({
     type: t.Thing,
-    lid: 'bad',
+    lid: "bad",
     rounded: 6.2,
     even: 5,
   });
 });
 
-tg.check('bad', {
+tg.check("bad", {
   type: t.Thing,
-  lid: 'bad',
+  lid: "bad",
   rounded: 6,
   even: null,
 });

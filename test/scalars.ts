@@ -1,13 +1,11 @@
-let assert = require('assert');
-let jseg = require('../src');
-let {TestGraph} = require('./util');
+import jseg from "../src";
+import { TestGraph } from "./util";
 
 let [b, t] = jseg.newSchema();
 
-b.entity('Thing');
+b.entity("Thing");
 
 b.finalize({
-
   attributes: {
     Thing: {
       any: t.Scalar,
@@ -18,7 +16,6 @@ b.finalize({
   },
 
   relationships: [],
-
 });
 
 let tg = new TestGraph(t);
@@ -26,40 +23,41 @@ let tg = new TestGraph(t);
 tg.expectMessage('unknown field "mystery"', () => {
   tg.g.put({
     type: t.Thing,
-    lid: 'x',
-    text: 'y',
-    mystery: 'z',
-    deleteme: 'ok',
+    lid: "x",
+    text: "y",
+    mystery: "z",
+    deleteme: "ok",
   });
 });
 
-tg.check('x', {
+tg.check("x", {
   type: t.Thing,
-  lid: 'x',
-  text: 'y',
-  deleteme: 'ok',
+  lid: "x",
+  text: "y",
+  deleteme: "ok",
   any: null,
   bool: null,
 });
 
 class Foo {
-  constructor(bar) {
+  bar: any;
+  constructor(bar?: any) {
     this.bar = bar;
   }
 }
 let foo = new Foo();
 
 tg.g.put({
-  lid: 'x',
+  lid: "x",
   deleteme: null,
   bool: false,
   any: foo,
 });
 
-tg.check('x', {
-  lid: 'x',
+tg.check("x", {
+  lid: "x",
   type: t.Thing,
-  text: 'y',
+  text: "y",
   deleteme: null,
   bool: false,
   any: foo,

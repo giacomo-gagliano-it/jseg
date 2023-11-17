@@ -11,5 +11,11 @@
     "test": "node test"
   },
   "author": "Brandon Bloom",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
 }

@@ -1,61 +1,59 @@
-let assert = require('assert');
-let jseg = require('../src');
-let {TestGraph} = require('./util');
+import jseg from "../src";
+import { TestGraph } from "./util";
 
 let [b, t] = jseg.newSchema();
 
-b.entity('Node');
+b.entity("Node");
 
 b.finalize({
-
   attributes: {},
 
   relationships: [
-    [[t.Node, 'many', 'mToN'],
-     [t.Node, 'many', 'nToM']],
+    [
+      [t.Node, "many", "mToN"],
+      [t.Node, "many", "nToM"],
+    ],
   ],
-
 });
 
 let tg = new TestGraph(t);
 
-
 tg.g.put({
   type: t.Node,
-  lid: 'a',
+  lid: "a",
   mToN: [
     {
       type: t.Node,
-      lid: 'x',
+      lid: "x",
     },
     {
       type: t.Node,
-      lid: 'y',
+      lid: "y",
     },
   ],
 });
 
-tg.check('a', {
+tg.check("a", {
   type: t.Node,
-  lid: 'a',
+  lid: "a",
   nToM: [],
   mToN: [
     {
       type: t.Node,
-      lid: 'x',
+      lid: "x",
       nToM: [
         {
-          lid: 'a',
+          lid: "a",
         },
       ],
       mToN: [],
     },
     {
       type: t.Node,
-      lid: 'y',
+      lid: "y",
       nToM: [
         {
-          lid: 'a',
+          lid: "a",
         },
       ],
       mToN: [],
@@ -63,18 +61,18 @@ tg.check('a', {
   ],
 });
 
-tg.g.remove('a', 'mToN', 'x');
-tg.check('a', {
+tg.g.remove("a", "mToN", "x");
+tg.check("a", {
   type: t.Node,
-  lid: 'a',
+  lid: "a",
   nToM: [],
   mToN: [
     {
       type: t.Node,
-      lid: 'y',
+      lid: "y",
       nToM: [
         {
-          lid: 'a',
+          lid: "a",
         },
       ],
       mToN: [],
@@ -82,50 +80,50 @@ tg.check('a', {
   ],
 });
 
-tg.g.remove('y', 'nToM', 'a');
-tg.check('a', {
+tg.g.remove("y", "nToM", "a");
+tg.check("a", {
   type: t.Node,
-  lid: 'a',
+  lid: "a",
   nToM: [],
   mToN: [],
 });
 
 tg.g.put({
   type: t.Node,
-  lid: 'x',
+  lid: "x",
   nToM: [
     {
       type: t.Node,
-      lid: 'a',
+      lid: "a",
     },
     {
       type: t.Node,
-      lid: 'b',
+      lid: "b",
     },
   ],
 });
-tg.check('x', {
+tg.check("x", {
   type: t.Node,
-  lid: 'x',
+  lid: "x",
   nToM: [
     {
       type: t.Node,
-      lid: 'a',
+      lid: "a",
       nToM: [],
       mToN: [
         {
-          lid: 'x',
-        }
+          lid: "x",
+        },
       ],
     },
     {
       type: t.Node,
-      lid: 'b',
+      lid: "b",
       nToM: [],
       mToN: [
         {
-          lid: 'x',
-        }
+          lid: "x",
+        },
       ],
     },
   ],

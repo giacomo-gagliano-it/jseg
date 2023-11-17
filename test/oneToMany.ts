@@ -1,122 +1,121 @@
-let assert = require('assert');
-let jseg = require('../src');
-let {TestGraph} = require('./util');
+import jseg from "../src";
+import { TestGraph } from "./util";
 
 let [b, t] = jseg.newSchema();
 
-b.entity('Node');
+b.entity("Node");
 
 b.finalize({
-
   attributes: {},
 
   relationships: [
-    [[t.Node, 'many', 'children'],
-     [t.Node, 'one', 'parent']],
+    [
+      [t.Node, "many", "children"],
+      [t.Node, "one", "parent"],
+    ],
   ],
-
 });
 
 let tg = new TestGraph(t);
 
 tg.g.put({
   type: t.Node,
-  lid: 'loner',
+  lid: "loner",
 });
-tg.check('loner', {
+tg.check("loner", {
   type: t.Node,
-  lid: 'loner',
+  lid: "loner",
   parent: null,
   children: [],
 });
 
 tg.g.put({
   type: t.Node,
-  lid: 'root',
+  lid: "root",
   children: [
     {
       type: t.Node,
-      lid: 'x',
+      lid: "x",
     },
     {
       type: t.Node,
-      lid: 'y',
+      lid: "y",
     },
     {
       type: t.Node,
-      lid: 'z',
+      lid: "z",
     },
   ],
 });
 
-tg.check('root', {
+tg.check("root", {
   type: t.Node,
-  lid: 'root',
+  lid: "root",
   parent: null,
   children: [
     {
       type: t.Node,
-      lid: 'x',
+      lid: "x",
       parent: {
-        lid: 'root',
+        lid: "root",
       },
       children: [],
     },
     {
       type: t.Node,
-      lid: 'y',
+      lid: "y",
       parent: {
-        lid: 'root',
+        lid: "root",
       },
       children: [],
     },
     {
       type: t.Node,
-      lid: 'z',
+      lid: "z",
       parent: {
-        lid: 'root',
-      },
-      children: [],
-    },
-  ],
-});
-
-tg.g.destroy('y');
-tg.check('root', {
-  type: t.Node,
-  lid: 'root',
-  parent: null,
-  children: [
-    {
-      type: t.Node,
-      lid: 'x',
-      parent: {
-        lid: 'root',
-      },
-      children: [],
-    },
-    {
-      type: t.Node,
-      lid: 'z',
-      parent: {
-        lid: 'root',
+        lid: "root",
       },
       children: [],
     },
   ],
 });
 
-tg.g.remove('root', 'children', 'x');
-tg.check('root', {
+tg.g.destroy("y");
+tg.check("root", {
   type: t.Node,
-  lid: 'root',
+  lid: "root",
   parent: null,
   children: [
     {
       type: t.Node,
-      lid: 'z',
+      lid: "x",
       parent: {
-        lid: 'root',
+        lid: "root",
+      },
+      children: [],
+    },
+    {
+      type: t.Node,
+      lid: "z",
+      parent: {
+        lid: "root",
+      },
+      children: [],
+    },
+  ],
+});
+
+tg.g.remove("root", "children", "x");
+tg.check("root", {
+  type: t.Node,
+  lid: "root",
+  parent: null,
+  children: [
+    {
+      type: t.Node,
+      lid: "z",
+      parent: {
+        lid: "root",
       },
       children: [],
     },
@@ -125,33 +124,30 @@ tg.check('root', {
 
 tg.g.put({
   type: t.Node,
-  lid: 'z',
+  lid: "z",
   parent: null,
 });
-tg.check('root', {
+tg.check("root", {
   type: t.Node,
-  lid: 'root',
+  lid: "root",
   parent: null,
   children: [],
 });
 
-
 tg.g.put({
   type: t.Node,
-  lid: 'x',
-  parent: {lid: 'root'},
+  lid: "x",
+  parent: { lid: "root" },
 });
 
-tg.check('x', {
+tg.check("x", {
   type: t.Node,
-  lid: 'x',
+  lid: "x",
   parent: {
     type: t.Node,
-    lid: 'root',
+    lid: "root",
     parent: null,
-    children: [
-      {lid: 'x'},
-    ],
+    children: [{ lid: "x" }],
   },
   children: [],
 });
